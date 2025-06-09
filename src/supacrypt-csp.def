@@ -1,0 +1,37 @@
+; supacrypt-csp.def - Module definition file for Supacrypt CSP
+; 
+; This file defines the exported functions required for a Windows
+; Cryptographic Service Provider (CSP) implementation.
+
+LIBRARY supacrypt-csp
+
+EXPORTS
+    ; Core CSP functions (required)
+    CPAcquireContext        @1
+    CPReleaseContext        @2
+    CPGenKey                @3
+    CPDestroyKey            @4
+    CPSetKeyParam           @5
+    CPGetKeyParam           @6
+    CPExportKey             @7
+    CPImportKey             @8
+    CPEncrypt               @9
+    CPDecrypt               @10
+    CPCreateHash            @11
+    CPDestroyHash           @12
+    CPSetHashParam          @13
+    CPGetHashParam          @14
+    CPHashData              @15
+    CPHashSessionKey        @16
+    CPSignHash              @17
+    CPVerifySignature       @18
+    CPGenRandom             @19
+    CPGetUserKey            @20
+    CPSetProvParam          @21
+    CPGetProvParam          @22
+    CPDeriveKey             @23
+    CPDuplicateHash         @24
+    CPDuplicateKey          @25
+    
+    ; Optional DLL entry point
+    DllMain                 @26

@@ -1,0 +1,66 @@
+# supacrypt-csp-config.cmake.in - Package configuration template
+
+@PACKAGE_INIT@
+
+# Import targets
+include("${CMAKE_CURRENT_LIST_DIR}/SupacryptCSPTargets.cmake")
+
+# Set variables for backward compatibility
+set(SupacryptCSP_VERSION @PROJECT_VERSION@)
+set(SupacryptCSP_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(SupacryptCSP_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(SupacryptCSP_VERSION_PATCH @PROJECT_VERSION_PATCH@)
+
+# Define component variables
+set(SupacryptCSP_FOUND TRUE)
+
+if(TARGET SupacryptCSP::supacrypt-csp)
+    set(SupacryptCSP_CSP_FOUND TRUE)
+else()
+    set(SupacryptCSP_CSP_FOUND FALSE)
+endif()
+
+if(TARGET SupacryptCSP::supacrypt_proto_csp)
+    set(SupacryptCSP_PROTO_FOUND TRUE)
+else()
+    set(SupacryptCSP_PROTO_FOUND FALSE)
+endif()
+
+# Check required components
+set(_SupacryptCSP_REQUIRED_COMPONENTS ${SupacryptCSP_FIND_COMPONENTS})
+if(NOT _SupacryptCSP_REQUIRED_COMPONENTS)
+    set(_SupacryptCSP_REQUIRED_COMPONENTS CSP)
+endif()
+
+foreach(_component ${_SupacryptCSP_REQUIRED_COMPONENTS})
+    if(_component STREQUAL "CSP")
+        if(NOT SupacryptCSP_CSP_FOUND)
+            set(SupacryptCSP_FOUND FALSE)
+            set(SupacryptCSP_NOT_FOUND_MESSAGE "Required component CSP not found")
+        endif()
+    elseif(_component STREQUAL "Proto")
+        if(NOT SupacryptCSP_PROTO_FOUND)
+            set(SupacryptCSP_FOUND FALSE)
+            set(SupacryptCSP_NOT_FOUND_MESSAGE "Required component Proto not found")
+        endif()
+    else()
+        set(SupacryptCSP_FOUND FALSE)
+        set(SupacryptCSP_NOT_FOUND_MESSAGE "Unknown component: ${_component}")
+    endif()
+endforeach()
+
+# Provide legacy variables
+if(SupacryptCSP_FOUND)
+    set(SupacryptCSP_LIBRARIES "")
+    set(SupacryptCSP_INCLUDE_DIRS "")
+    
+    if(SupacryptCSP_CSP_FOUND)
+        list(APPEND SupacryptCSP_LIBRARIES SupacryptCSP::supacrypt-csp)
+    endif()
+    
+    if(SupacryptCSP_PROTO_FOUND)
+        list(APPEND SupacryptCSP_LIBRARIES SupacryptCSP::supacrypt_proto_csp)
+    endif()
+endif()
+
+check_required_components(SupacryptCSP)
